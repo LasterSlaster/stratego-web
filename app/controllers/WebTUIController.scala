@@ -4,35 +4,35 @@ import play.api.data.Forms._
 import javax.inject.{Inject, Singleton}
 import play.api.data.Form
 import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
-import stratego.model.engineComponent.{GameEngine, GameEngineInterface, GameState}
+import stratego.model.engineComponent.{GameEngine, GameEngineInterface, GameEngineProxy, GameState}
 import stratego.model.gridComponent.{FigureType, Position}
 import stratego.view.tui.ConsoleView
 
 @Singleton
 class WebTUIController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  var gameEngine: GameEngineInterface = GameEngine()
+  val gameEngine: GameEngineInterface = new GameEngineProxy(GameEngine())
   val consoleView = new ConsoleView()
+
+  def startNewGame() = Action { implicit request: Request[AnyContent] =>
+    val newGameEngine = gameEngine.startNewGame
+    val content = consoleView.gameStartToString(newGameEngine)
+    Ok(views.html.figuresetup(content))
+  }
 
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index(consoleView.gameMenuToString))
   }
 
-  def startNewGame() = Action { implicit request: Request[AnyContent] =>
-    gameEngine = gameEngine.startNewGame
-    val content = consoleView.gameStartToString(gameEngine)
-    Ok(views.html.figuresetup(content))
-  }
-
   def startNewDefaultGame() = Action { implicit request: Request[AnyContent] =>
-    gameEngine = gameEngine.setUpDefaultGrid
-    val content = consoleView.figureSetResultToString(gameEngine)
+    val newGameEngine = gameEngine.setUpDefaultGrid
+    val content = consoleView.figureSetResultToString(newGameEngine)
     Ok(views.html.game(content))
   }
 
   def quitGame() = Action { implicit request: Request[AnyContent] =>
-    gameEngine = gameEngine.quitGame
-    val content = consoleView.gameQuitToString(gameEngine)
+    val newGameEngine = gameEngine.quitGame
+    val content = consoleView.gameQuitToString(newGameEngine)
     Ok(views.html.index(content))
   }
 
@@ -42,9 +42,9 @@ class WebTUIController @Inject()(val controllerComponents: ControllerComponents)
       form => {
         val figureType = convertInputToFigureType(id.toInt)
         val position = Position(form._1, form._2)
-        gameEngine = gameEngine.setFigure(figureType, position)
-        val content = consoleView.figureSetResultToString(gameEngine)
-        gameEngine.getGameState match {
+        val newGameEngine = gameEngine.setFigure(figureType, position)
+        val content = consoleView.figureSetResultToString(newGameEngine)
+        newGameEngine.getGameState match {
           case GameState.FIGHT => Ok(views.html.game(content))
           case GameState.SET_FIGURES => Ok(views.html.figuresetup(content))
         }
@@ -61,9 +61,9 @@ class WebTUIController @Inject()(val controllerComponents: ControllerComponents)
         val col = split(1)
         val fromPosition = Position(row.toInt, col.toInt)
         val toPosition = Position(form._1, form._2)
-        gameEngine = gameEngine.moveFigure(fromPosition, toPosition)
-        val content = consoleView.moveResultToString(gameEngine)
-        gameEngine.getGameState match {
+        val newGameEngine = gameEngine.moveFigure(fromPosition, toPosition)
+        val content = consoleView.moveResultToString(newGameEngine)
+        newGameEngine.getGameState match {
           case GameState.FIGHT => Ok(views.html.game(content))
           case GameState.END => Ok(views.html.index(content))
         }
