@@ -23,7 +23,6 @@ trait GameEngineInterface extends Publisher {
   def getActivePlayer: Player
   def getWinner: Option[Player]
   def getStatusLine: GameStatus
-  def setUpDefaultGrid: GameEngineInterface
   def getFieldStringGUI(position:Position): String
   def gridToString: String
 }

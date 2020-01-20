@@ -24,12 +24,6 @@ class WebTUIController @Inject()(val controllerComponents: ControllerComponents)
     Ok(views.html.index(consoleView.gameMenuToString))
   }
 
-  def startNewDefaultGame() = Action { implicit request: Request[AnyContent] =>
-    val newGameEngine = gameEngine.setUpDefaultGrid
-    val content = consoleView.figureSetResultToString(newGameEngine)
-    Ok(views.html.game(content))
-  }
-
   def quitGame() = Action { implicit request: Request[AnyContent] =>
     val newGameEngine = gameEngine.quitGame
     val content = consoleView.gameQuitToString(newGameEngine)

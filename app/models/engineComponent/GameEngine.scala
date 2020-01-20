@@ -2,7 +2,7 @@ package stratego.model.engineComponent
 
 import stratego.gameEngine.GameStatus._
 import GameState._
-import stratego.model.gridComponent.Figure.{Bomb, Captain, Colonel, Flag, Lieutenant, Major, Marshal, Miner, Scout, Sergeant, Spy, General}
+import stratego.model.gridComponent.Figure.{Bomb, Captain, Colonel, Flag, General, Lieutenant, Major, Marshal, Miner, Scout, Sergeant, Spy}
 import stratego.model.gridComponent.FigureType._
 import stratego.model.gridComponent.FieldType._
 import stratego.model.gridComponent.{Figure, FigureSet, Grid, GridInterface, Position}
@@ -45,7 +45,7 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
         }
         val figureSetTmp = newFigureSet(activePlayer).removeFigure(figureType)
         newFigureSet = newFigureSet.updated(activePlayer, figureSetTmp)
-        newGrid = grid.assignField(position, newFigureSet(activePlayer).getLastFigure())
+        newGrid = grid.assignField(position, newFigureSet(activePlayer).getLastFigure)
       } else {
         newStatusLine = INVALID_POSITION
       }
@@ -64,6 +64,22 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
     }
     val newGameEngine = copy(grid = newGrid, gameState = newGameState, statusLine = newStatusLine, figureSet = newFigureSet, activePlayer = nextPlayer)
     publish(FigureSetEvent(newGameEngine))
+    newGameEngine
+  }
+
+  def deleteFigure(position: Position): GameEngineInterface = {
+    var newGrid = grid
+    var newFigureSet = figureSet
+    var newStatusLine = WRONG_INPUT
+    if (grid.getField(position).getFieldType() == activePlayer.fieldType) {
+      if (grid.getField(position).getFigure().isDefined) {
+        newFigureSet = newFigureSet.updated(activePlayer, newFigureSet(activePlayer).addFigure(grid.getField(position).getFigure().get))
+        newGrid = grid.assignField(position, None)
+        newStatusLine = FIGURE_DELETED
+      }
+    }
+    val newGameEngine = copy(grid = newGrid, figureSet = newFigureSet, statusLine = newStatusLine)
+    publish(FigureDeletedEvent(newGameEngine))
     newGameEngine
   }
 
@@ -164,40 +180,6 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
     val newGameEngine = copy(activePlayer = if (activePlayer == playerA) playerB else playerA)
     publish(ChangePlayerEvent(newGameEngine))
     newGameEngine
-  }
-  //does not work yet !!!
-  def setUpDefaultGrid: GameEngineInterface = {
-    var newGrid = Grid().createNewGrid()
-    val tempFigureSetA = createFigureList(playerA)
-    val tempFigureSetB = createFigureList(playerB)
-    for {
-      row <- 0 until 4
-      col <- 0 until 10
-      figure <- tempFigureSetA
-    } newGrid = newGrid.assignField(Position(row, col), Some(figure))
-    for {
-      row <- 6 until 10
-      col <- 0 until 10
-      figure <- tempFigureSetB
-    } newGrid = newGrid.assignField(Position(row, col), Some(figure))
-    val newGameEngine = copy(grid = newGrid, gameState = FIGHT)
-    publish(FigureSetEvent(newGameEngine))
-    newGameEngine
-  }
-
-  def createFigureList(player: Player): List[Figure] = {
-    List(Bomb(player), Bomb(player), Bomb(player), Bomb(player), Bomb(player), Bomb(player),
-      Marshal(player),
-      General(player),
-      Colonel(player), Colonel(player),
-      Major(player), Major(player), Major(player),
-      Captain(player), Captain(player), Captain(player), Captain(player),
-      Lieutenant(player), Lieutenant(player), Lieutenant(player), Lieutenant(player),
-      Sergeant(player), Sergeant(player), Sergeant(player), Sergeant(player),
-      Miner(player), Miner(player), Miner(player), Miner(player), Miner(player),
-      Scout(player), Scout(player), Scout(player), Scout(player), Scout(player), Scout(player), Scout(player), Scout(player),
-      Flag(player),
-      Spy(player))
   }
 
   def gridToString: String = grid.toStringTUI(gameState, activePlayer)

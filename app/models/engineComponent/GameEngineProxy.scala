@@ -44,10 +44,6 @@ class GameEngineProxy(var gameEngine: GameEngineInterface) extends GameEngineInt
     remap(gameEngine.moveFigure(from, to))
   }
 
-  def setUpDefaultGrid: GameEngineInterface = {
-    remap(gameEngine.setUpDefaultGrid)
-  }
-
   private def remap(newGameEngine: GameEngineInterface): GameEngineInterface = {
     deafTo(gameEngine)
     listenTo(newGameEngine)

@@ -6,6 +6,7 @@ object GameStatus extends Enumeration {
     val NO_FIGURES_LEFT = Value("Not enough figures of this type")
     val INVALID_POSITION = Value("Figure can't be placed on this field")
     val FIGURE_SET = Value("Figure was successfully placed on field")
+    val FIGURE_DELETED = Value("Figure was successfully deleted")
     val IDLE = Value("Idle")
     val NO_VALID_FIGURE = Value("No valid figure found")
     val PLAYERA_WINS = Value("Player A wins")
@@ -18,4 +19,6 @@ object GameStatus extends Enumeration {
     val MINER_ATTACKS_BOMB = Value("Miner defused a bomb!")
     val BOMB_EXPLODES = Value("Bomb!")
     val FLAG_FOUND = Value("Flag was found")
+    val BATTLE_START = Value("All figures set! Match beginns..")
+
 }

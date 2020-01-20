@@ -10,7 +10,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # Stratego Routes
 GET    /stratego                           controllers.WebTUIController.index
 POST   /stratego/game                      controllers.WebTUIController.startNewGame
-POST   /stratego/defaultgame               controllers.WebTUIController.startNewDefaultGame
 DELETE /stratego/game                      controllers.WebTUIController.quitGame
 POST    /stratego/figureset/figure/:id      controllers.WebTUIController.placeFigure(id: String)
 POST    /stratego/grid/figure/:id           controllers.WebTUIController.moveFigure(id: String)
