@@ -46,8 +46,6 @@ case class Grid (matrix: Matrix[Field] = new Matrix[Field](10, Field(FieldType.E
     assignField(from, None).assignField(to, figure)
   }
 
-  // private def noFieldAssignment(row: Int, col: Int, grid: GridInterface): GridInterface = {var grid = this; copy(grid.matrix.replaceField(row, col, Field(FieldType.NO_FIELD, None)))}
-
   def toStringTUI(gameState: GameState, activePlayer: Player): String = {
     var stringGrid = "\n"
     for {

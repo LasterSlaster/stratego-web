@@ -87,7 +87,6 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
         publish(MoveFigureEvent(newGameEngine))
       } else if (destination.getFigure.isDefined && destination.getFigure.get.player != activePlayer && isValidMove(from, to)) {
         val opponent = destination.getFigure.get
-        // TODO: Wrap case code in generic function and stay DRY
         (figure, opponent) match {
           case (a:Spy, b:Marshal) =>
             newGrid = newGrid.move(from, to)
@@ -201,7 +200,7 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
       Spy(player))
   }
 
-  def gridToString: String = grid.toStringTUI(gameState, activePlayer) //TODO: When time refactor these toStringTUI methods
+  def gridToString: String = grid.toStringTUI(gameState, activePlayer)
 
   def getFigure(position: Position): Option[Figure] = grid.getField(position).getFigure
 

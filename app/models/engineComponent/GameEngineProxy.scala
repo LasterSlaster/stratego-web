@@ -12,7 +12,6 @@ class GameEngineProxy(var gameEngine: GameEngineInterface) extends GameEngineInt
   listenTo(gameEngine)
   deafTo(this)
   reactions += {
-      case event: Init => this.publish(event)
       case event: GameStartedEvent => this.publish(event)
       case event: FigureSetEvent => this.publish(event)
       case event: MoveFigureEvent => this.publish(event)
@@ -20,7 +19,6 @@ class GameEngineProxy(var gameEngine: GameEngineInterface) extends GameEngineInt
       case event: AttackEvent => this.publish(event)
       case event: WinnerEvent => this.publish(event)
       case event: GameQuitEvent => this.publish(event)
-      case _ => this.publish(_)
   }
 
   def startNewGame: GameEngineInterface =  {
