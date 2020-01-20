@@ -3,8 +3,14 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+
+# Stratego Routes
+GET    /stratego                           controllers.WebTUIController.index
+POST   /stratego/game                      controllers.WebTUIController.startNewGame
+POST   /stratego/defaultgame               controllers.WebTUIController.startNewDefaultGame
+DELETE /stratego/game                      controllers.WebTUIController.quitGame
+POST    /stratego/figureset/figure/:id      controllers.WebTUIController.placeFigure(id: String)
+POST    /stratego/grid/figure/:id           controllers.WebTUIController.moveFigure(id: String)

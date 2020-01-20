@@ -1,5 +1,15 @@
-@()
+@(content: String)
 
 @main("Stratego") {
-  <h1>Welcome to Play!</h1>
+  <h1>Stratego Web!</h1>
+  <p>@content</p>
+  <form action="/stratego/game" method="post">
+    <button type="submit" id="new" value="n">New Game</button>
+  </form>
+  <form action="/stratego/defaultgame" method="post">
+    <button type="submit" id="newDefault" value="d">New Default Game</button>
+  </form>
+  <form action="/stratego/game" method="delete">
+    <button type="submit" id="quit" value="q">Quit Game</button>
+  </form>
 }

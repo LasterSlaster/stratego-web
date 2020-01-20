@@ -38,7 +38,3 @@ case class AttackEvent(gameEngine: GameEngineInterface) extends Event
 case class InvalidMoveEvent(gameEngine: GameEngineInterface) extends Event
 case class ChangePlayerEvent(gameEngine: GameEngineInterface) extends Event
 case class Init() extends Event
-
-//TODO: remove these two events
-case class GameQuit() extends Event
-case class GameChanged() extends Event

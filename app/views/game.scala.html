@@ -1,0 +1,23 @@
+@(content: String)
+
+@main("Stratego") {
+  <h1>Stratego Web!</h1>
+  <p>@content</p>
+  <form id="form" action="/stratego/grid/figure/" method="post">
+    <p>Move figure from: </p>
+    <label for="fromRow">row:
+      <input id="fromRow" name="fromRow" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <label for="fromCol">col:
+      <input id="fromCol" name="fromCol" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <p>to: </p>
+    <label for="toRow">row:
+      <input id="toRow" name="toRow" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <label for="toCol">col:
+      <input id="toCol" name="toCol" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <button type="submit" id="move" name="move" value="m">Move Figure</button>
+  </form>
+}

@@ -1,0 +1,18 @@
+@(content: String)
+
+@main("Stratego") {
+  <h1>Stratego Web!</h1>
+  <p>@content</p>
+  <form id="form" action="/stratego/figureset/figure/" method="post">
+    <label for="figure">Figure:
+      <input id="figure" name="figure" type="number" min="1" max="12" step="1" value="1">
+      </label>
+    <label for="row">row:
+      <input id="row" name="row" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <label for="col">row:
+      <input id="col" name="col" type="number" min="0" max="9" step="1" value="0">
+    </label>
+    <button type="submit" id="place" name="place" value="s">Place Figure</button>
+  </form>
+}

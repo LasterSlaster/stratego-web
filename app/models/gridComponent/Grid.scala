@@ -57,7 +57,7 @@ case class Grid (matrix: Matrix[Field] = new Matrix[Field](10, Field(FieldType.E
       stringGrid += getField(Position(row, col)).toStringTUI(gameState, activePlayer)
       if (col == 9) stringGrid += " " + row +"\n"
     }
-    stringGrid + "- A - B - C - D - E - F - G - H - I - J";
+    stringGrid + "- 0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9";
   }
 
 }

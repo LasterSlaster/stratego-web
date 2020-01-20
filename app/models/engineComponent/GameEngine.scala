@@ -8,7 +8,6 @@ import stratego.model.gridComponent.FieldType._
 import stratego.model.gridComponent.{Figure, FigureSet, Grid, GridInterface, Position}
 import stratego.model.playerComponent.Player
 
-// TODO: Think about adding State Pattern instead of enum gameState
 case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
                            gameState: GameState = NOT_STARTED,
                            playerA: Player = Player("PlayerA", A_SIDE),
@@ -19,13 +18,13 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
                            statusLine: GameStatus = IDLE) extends GameEngineInterface {
 
   def startNewGame(): GameEngineInterface = {
-    val newGameEngine = copy(gameState = NEW_GAME)
-    publish(GameStartedEvent(newGameEngine)) // Add values which changed to the event so listeners can operate on them
+    val newGameEngine = GameEngine()
+    publish(GameStartedEvent(newGameEngine))
     newGameEngine
   }
 
-  def quitGame(): GameEngineInterface = { //TODO: Review quit game logic
-    val newGameEngine = copy(gameState = END)
+  def quitGame(): GameEngineInterface = {
+    val newGameEngine = copy(gameState = END, grid = Grid(), statusLine = IDLE)
     publish(GameQuitEvent(newGameEngine))
     newGameEngine
   }
@@ -68,23 +67,6 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
     newGameEngine
   }
 
-  //TODO: remove this method
-  def createFigure(figureType: FigureType, player: Player): Figure = {
-     figureType match { // Throws an exception if string does not match any FigureType!
-      case SCOUT => Scout(player)
-      case MARSHAL => Marshal(player)
-      case COLONEL => Colonel(player)
-      case MAJOR => Major(player)
-      case CAPTAIN => Captain(player)
-      case LIEUTENANT => Lieutenant(player)
-      case SERGEANT => Sergeant(player)
-      case MINER => Miner(player)
-      case FLAG => Flag(player)
-      case SPY => Spy(player)
-      case BOMB => Bomb(player)
-    }
-  }
-
   def moveFigure(from: Position, to: Position): GameEngineInterface = {
     val source = grid.getField(from)
     val destination = grid.getField(to)
@@ -97,7 +79,6 @@ case class GameEngine (grid: GridInterface = Grid().createNewGrid(),
     if (source.getFigure.isDefined &&
       source.getFigure.get.player == activePlayer &&
       !isImmobileFigure(source.getFigure.get) ) {
-      //TODO: Implement move validation for scout
       val figure = source.getFigure.get
       if (destination.getFieldType != NO_FIELD && destination.getFigure.isEmpty && isValidMove(from, to)) {
         newGrid = newGrid.move(from, to)
