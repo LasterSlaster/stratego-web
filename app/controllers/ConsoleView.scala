@@ -9,7 +9,6 @@ class ConsoleView {
     "\nWelcome to Stratego" +
       "\n\nOptions:" +
       "\n\"n\": Start a new game" +
-      "\n\"d\": Start game with default setup" +
       "\n\"q\": Quit the game"
   }
 
